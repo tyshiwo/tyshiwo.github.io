@@ -276,6 +276,12 @@ div.codeblock > div.blockcontent {
 	background: #f6f6f6;
 }
 
+div.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 span.pycommand {
 	color: #000070;
 }
@@ -368,3 +374,4 @@ table.imgtable, table.imgtable td {
     border: none;
     text-align: left;
 }
+
