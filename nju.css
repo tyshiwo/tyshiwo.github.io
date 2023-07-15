@@ -2,10 +2,10 @@
 /* Copyright (C) Jacob Mattingley 2007. */
 
 a, a > tt {
-	color:rgb(200, 22, 30);  
+	color:rgb(106, 0, 95);  
 }
 a:hover {
-	border-bottom: 1px rgb(200, 22, 30) dotted;
+	border-bottom: 1px rgb(106, 0, 95) dotted;
 }
 
 div#toptitle {
@@ -14,16 +14,16 @@ div#toptitle {
 }
 
 h1, h2, h3{
-	color:  rgb(200, 22, 30);  
+	color:  rgb(106, 0, 95);  
 }
 
 #layout-menu a.current:link, #layout-menu a.current:visited {
-	background-color:rgb(200, 22, 30);
+	background-color:rgb(106, 0, 95);
 	color:white;
 }
 
 #layout-menu a:link, #layout-menu a:visited, #layout-menu a:hover {
-	color: rgb(200, 22, 30);
+	color: rgb(106, 0, 95);
 	text-decoration: none;
 }
 
@@ -36,7 +36,7 @@ div#footer-text {
 }
 
 div.blocktitle {
-	color: rgb(200, 22, 30);
+	color: rgb(106, 0, 95);
 }
 
 div.blockcontent {
