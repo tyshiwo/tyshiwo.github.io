@@ -375,3 +375,18 @@ table.imgtable, table.imgtable td {
     text-align: left;
 }
 
+.scroll-container {
+  height: 30vh;                /* 容器高度为视口高度 */
+  overflow-y: scroll;           /* 允许垂直滚动 */
+  scroll-snap-type: y mandatory;/* 垂直方向强制对齐 */
+}
+
+.panel {
+  height: 30vh;                /* 每个面板也占满一屏 */
+  scroll-snap-align: start;     /* 对齐到容器顶部 */
+  /* 可选：美化 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
