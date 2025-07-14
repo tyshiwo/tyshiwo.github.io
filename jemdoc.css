@@ -376,9 +376,9 @@ table.imgtable, table.imgtable td {
 }
 
 .container {
-  width: 400px;
-  height: 300px;
-  border: 1px solid #ccc;
+  width: 1400px;
+  height: 800px;
+  border: 0.1px solid #ccc;
   overflow: hidden;
 }
 
@@ -389,12 +389,12 @@ table.imgtable, table.imgtable td {
 }
 
 .block {
-  height: 300px;
+  height: 800px;
   scroll-snap-align: start;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 24px;
+  font-size: 12px;
   background-color: #f0f0f0;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 0.1px solid #ddd;
 }
