@@ -375,18 +375,26 @@ table.imgtable, table.imgtable td {
     text-align: left;
 }
 
-.scroll-container {
-  height: 30vh;                /* 容器高度为视口高度 */
-  overflow-y: scroll;           /* 允许垂直滚动 */
-  scroll-snap-type: y mandatory;/* 垂直方向强制对齐 */
+.container {
+  width: 400px;
+  height: 300px;
+  border: 1px solid #ccc;
+  overflow: hidden;
 }
 
-.panel {
-  height: 30vh;                /* 每个面板也占满一屏 */
-  scroll-snap-align: start;     /* 对齐到容器顶部 */
-  /* 可选：美化 */
+.scroll-area {
+  height: 100%;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+}
+
+.block {
+  height: 300px;
+  scroll-snap-align: start;
   display: flex;
-  align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  align-items: center;
+  font-size: 24px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ddd;
 }
