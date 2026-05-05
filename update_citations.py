@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Google Scholar 引用数自动更新脚本
-从 Google Scholar 爬取引用数，并更新到 index.html
+从 defineabc.com (Google Scholar 镜像) 爬取引用数，并更新到 index.html
 """
 
 import re
@@ -20,12 +20,13 @@ BRANCH = "master"
 TOKEN = os.environ.get('TOKEN', '')
 
 def fetch_citations():
-    """爬取 Google Scholar 引用数"""
-    print("正在获取 Google Scholar 数据...")
-    url = f"https://scholar.google.com/citations?user={USER_ID}&hl=en"
+    """从 defineabc.com 爬取 Google Scholar 引用数"""
+    print("正在从 defineabc.com 获取 Google Scholar 数据...")
+    # 使用 defineabc.com 镜像站
+    url = f"https://www.defineabc.com/citations?user={USER_ID}&hl=zh-CN"
     
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     }
     
     try:
@@ -36,7 +37,16 @@ def fetch_citations():
         table = soup.find('table', id='gsc_rsb_st')
         
         if not table:
-            print("未找到引用数据表格")
+            print("未找到引用数据表格，尝试从页面描述提取...")
+            # 从页面描述中提取（如 "17,458 次引用"）
+            desc = soup.find('meta', attrs={'name': 'description'})
+            if desc:
+                match = re.search(r'([\d,]+)\s*次引用', desc.get('content', ''))
+                if match:
+                    citations = int(match.group(1).replace(',', ''))
+                    print(f"从描述中提取到引用数: {citations:,}")
+                    return citations
+            print("无法获取引用数据")
             return None
             
         rows = table.find_all('tr')
@@ -47,7 +57,7 @@ def fetch_citations():
             if len(cols) >= 2:
                 label = cols[0].get_text(strip=True)
                 value = cols[1].get_text(strip=True).replace(',', '')
-                if 'Cited by' in label and value.isdigit():
+                if ('引用' in label or 'Cited' in label) and value.isdigit():
                     citations = int(value)
                     break
         
@@ -55,7 +65,25 @@ def fetch_citations():
         return citations
         
     except Exception as e:
-        print(f"爬取失败: {e}")
+        print(f"从 defineabc.com 爬取失败: {e}")
+        # 尝试官方 Google Scholar
+        try:
+            print("尝试官方 Google Scholar...")
+            url2 = f"https://scholar.google.com/citations?user={USER_ID}&hl=en"
+            resp2 = requests.get(url2, headers=headers, timeout=15)
+            soup2 = BeautifulSoup(resp2.text, 'html.parser')
+            table2 = soup2.find('table', id='gsc_rsb_st')
+            if table2:
+                rows2 = table2.find_all('tr')
+                for row in rows2[1:]:
+                    cols = row.find_all('td')
+                    if len(cols) >= 2:
+                        label = cols[0].get_text(strip=True)
+                        value = cols[1].get_text(strip=True).replace(',', '')
+                        if 'Cited by' in label and value.isdigit():
+                            return int(value)
+        except Exception as e2:
+            print(f"官方站也失败: {e2}")
         return None
 
 def update_html(citations):
@@ -108,7 +136,7 @@ def update_html(citations):
         print("✅ 已成功更新并提交！")
         return True
     else:
-        print(f"提交失败: {update_resp.status_code} {update_resp.text}")
+        print(f"提交失败: {update_resp.status_code} {update_resp.text[:200]}")
         return False
 
 def main():
