@@ -7,24 +7,25 @@ on:
   workflow_dispatch:  # 允许手动触发
 
 jobs:
-  update:
+  update-citations:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
         
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-          
-      - name: Install dependencies
-        run: pip install requests beautifulsoup4
-          
-      - name: Fetch citations and update HTML
-        env:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPOSITORY: ${{ github.repository }}
-        run: python3 update_citations.py
+    - name: Install dependencies
+      run: pip install requests beautifulsoup4
+        
+    - name: Fetch citations and update HTML
+      env:
+        TOKEN: ${{ secrets.UPDATE_TOKEN }}
+        REPOSITORY: ${{ github.repository }}
+      run: python3 update_citations.py
