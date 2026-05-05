@@ -17,7 +17,7 @@ USER_ID = "NKaiUasAAAAJ"
 REPO = os.environ.get('GITHUB_REPOSITORY', 'tyshiwo/tyshiwo.github.io')
 FILE_PATH = "index.html"
 BRANCH = "master"
-TOKEN = os.environ.get('UPDATE_TOKEN', os.environ.get('TOKEN', ''))
+TOKEN = os.environ.get('TOKEN', '')
 
 def fetch_citations():
     """从 defineabc.com 爬取 Google Scholar 引用数"""
