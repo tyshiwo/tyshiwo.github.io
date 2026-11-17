@@ -10,6 +10,7 @@ import os
 import sys
 import json
 import base64
+import re
 import requests
 
 # GitHub 配置（从环境变量读取 token）
@@ -56,23 +57,13 @@ def add_news(news_text):
     # 构造新条目
     new_item = f'  <li><p style="text-align:left">{news_text} </p></li>\n'
     
-    # 找到 News 部分的 <ul> 并插入
-    lines = content.split('\n')
-    new_lines = []
-    in_news = False
-    ul_inserted = False
-    
-    for line in lines:
-        new_lines.append(line)
-        if '<h2>News</h2>' in line:
-            in_news = True
-        if in_news and '<ul>' in line and not ul_inserted:
-            # 在 <ul> 后插入新条目（添加到列表开头，保持时间倒序）
-            new_lines.append(new_item)
-            ul_inserted = True
-    
-    new_content = '\n'.join(new_lines)
-    
+    new_content, count = re.subn(
+        r'(<h2\b[^>]*>\s*News\s*</h2>\s*<ul\b[^>]*>)',
+        lambda match: match.group(1) + '\n' + new_item,
+        content, count=1, flags=re.IGNORECASE)
+    if count != 1:
+        raise ValueError('Could not locate the News list; no changes submitted')
+
     # 提交更新
     result = update_file("index.html", new_content, sha, f"Add news: {news_text[:50]}")
     print("✅ 新闻已添加！主页将在 1-2 分钟内更新。")
